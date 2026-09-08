@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#285d62" />
+    <meta name="description" content="A map quiz about where the apostles, Mark, and Paul served." />
+    <title>Disciples Map Quiz</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <aside id="panel">
+        <h1>Disciples Map Quiz</h1>
+        <div id="progress">Loading...</div>
+        <div id="prompt">—</div>
+        <div id="controls">
+          <button id="nextBtn" disabled>Next</button>
+          <button id="retryBtn" disabled>Retry</button>
+          <button id="revealBtn">Reveal Answer</button>
+          <button id="showAllBtn">Hint</button>
+        </div>
+        <div id="feedback"></div>
+        <section id="summary" hidden>
+          <h2>About this journey</h2>
+          <p id="summaryText"></p>
+          <a id="summarySource" href="https://suscopts.org/diocese/bishop/bible-study" target="_blank" rel="noreferrer">Read the SUSCopts source</a>
+        </section>
+        <div id="score">Score: 0 / 0</div>
+      </aside>
+      <main id="mapwrap">
+        <div id="map"></div>
+        <div class="compass-rose" aria-hidden="true"><span>N</span></div>
+      </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

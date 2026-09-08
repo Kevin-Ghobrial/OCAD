@@ -1,0 +1,9 @@
+{
+  "name": "Disciples Map Quiz",
+  "short_name": "Disciples Quiz",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#285d62",
+  "theme_color": "#285d62",
+  "description": "A map quiz about where the apostles, Mark, and Paul served."
+}

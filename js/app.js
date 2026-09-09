@@ -1,4 +1,4 @@
-let map = L.map('map', { zoomControl: true }).setView([20, 10], 2);
+let map = L.map('map', { zoomControl: false }).setView([20, 10], 2);
 
 const promptEl = document.getElementById('prompt');
 const progressEl = document.getElementById('progress');
@@ -8,9 +8,22 @@ const nextBtn = document.getElementById('nextBtn');
 const retryBtn = document.getElementById('retryBtn');
 const revealBtn = document.getElementById('revealBtn');
 const showAllBtn = document.getElementById('showAllBtn');
+const tutorialBtn = document.getElementById('tutorialBtn');
+const tutorialEl = document.getElementById('tutorial');
+const closeTutorialBtn = document.getElementById('closeTutorialBtn');
+const tutorialTitleEl = document.getElementById('tutorialTitle');
+const tutorialBodyEl = document.getElementById('tutorialBody');
+const tutorialProgressEl = document.getElementById('tutorialProgress');
+const tutorialBackBtn = document.getElementById('tutorialBackBtn');
+const tutorialNextBtn = document.getElementById('tutorialNextBtn');
 const summaryEl = document.getElementById('summary');
 const summaryTextEl = document.getElementById('summaryText');
 const summarySourceEl = document.getElementById('summarySource');
+const closeSummaryBtn = document.getElementById('closeSummaryBtn');
+const continueSummaryBtn = document.getElementById('continueSummaryBtn');
+const panelEl = document.getElementById('panel');
+const closePanelBtn = document.getElementById('closePanelBtn');
+const openPanelBtn = document.getElementById('openPanelBtn');
 
 let places = [];
 let index = 0;
@@ -19,11 +32,36 @@ let currentTarget = null;
 let submitted = false;
 let questionScored = false;
 let countryLayer;
+let panelOpen = true;
 const chartArtLayer = L.layerGroup().addTo(map);
 const countryLabels = [];
 const countryNames = new Map();
 const labelMeasureCanvas = document.createElement('canvas');
 const labelMeasureContext = labelMeasureCanvas.getContext('2d');
+
+const tutorialSteps = [
+  {
+    title: 'Welcome your group',
+    body: '<p>Tell everyone: “We are going to trace the journeys of the disciples, Mark, and Paul. Your job is to identify the country where each person served, ministered, or died.”</p><p>Remind the group that the map is a learning tool. Encourage thoughtful guesses and discussion before anyone uses a hint.</p>'
+  },
+  {
+    title: 'Explain a turn',
+    body: '<p>Read the question aloud, then give the group time to study the map. A player clicks a country to submit an answer.</p><p>Ask them to explain their reasoning: “What clues from the person’s story helped you choose this place?”</p>'
+  },
+  {
+    title: 'Handle an incorrect answer',
+    body: '<p>An incorrect country is marked, but the correct answer stays hidden. This keeps the activity focused on learning rather than guessing once.</p><p>Invite the player to use <strong>Retry</strong>, or let the group use <strong>Hint</strong> when they need help.</p>'
+  },
+  {
+    title: 'Use the explanation',
+    body: '<p>After a correct answer, read the journey summary together. Connect the location to the person’s ministry, travel, opposition, and service.</p><p>Use the source link when your group wants to explore the biblical study behind the summary.</p>'
+  },
+  {
+    title: 'Keep the group moving',
+    body: '<p>Use <strong>Next</strong> to continue. Keep a running conversation about patterns: how the gospel spread, why people traveled, and how the early witnesses responded to persecution.</p><p>At the end, review the score and invite each person to name one journey or location they remember.</p>'
+  }
+];
+let tutorialStep = 0;
 
 const normalStyle = { color: '#6f5a42', weight: 1, fillColor: '#d8c18e', fillOpacity: 0.88 };
 const hoverStyle = { color: '#174e55', weight: 2, fillColor: '#a9c9bd', fillOpacity: 0.9 };
@@ -234,9 +272,7 @@ function submitAnswer(countryCode) {
   nextBtn.disabled = !correct;
   retryBtn.disabled = false;
   if (correct) {
-    summaryTextEl.textContent = currentTarget.summary;
-    summarySourceEl.href = currentTarget.source;
-    summaryEl.hidden = false;
+    openSummary();
   }
   updateScore();
 }
@@ -274,7 +310,28 @@ revealBtn.addEventListener('click', ()=>{
   retryBtn.disabled = false;
   summaryTextEl.textContent = currentTarget.summary;
   summarySourceEl.href = currentTarget.source;
+  openSummary();
+});
+
+function openSummary() {
+  summaryTextEl.textContent = currentTarget.summary;
+  summarySourceEl.href = currentTarget.source;
   summaryEl.hidden = false;
+  closeSummaryBtn.focus();
+}
+
+function closeSummary() {
+  summaryEl.hidden = true;
+  if (currentTarget) continueSummaryBtn.blur();
+}
+
+closeSummaryBtn.addEventListener('click', closeSummary);
+continueSummaryBtn.addEventListener('click', closeSummary);
+summaryEl.addEventListener('click', event=>{
+  if (event.target === summaryEl) closeSummary();
+});
+document.addEventListener('keydown', event=>{
+  if (event.key === 'Escape' && !summaryEl.hidden) closeSummary();
 });
 
 showAllBtn.addEventListener('click', ()=>{
@@ -306,3 +363,57 @@ function nextQuestion(){
 function updateScore(){
   scoreEl.textContent = `Score: ${score} / ${places.length}`;
 }
+
+function setPanelOpen(isOpen) {
+  panelOpen = isOpen;
+  panelEl.classList.toggle('panel-hidden', !isOpen);
+  openPanelBtn.hidden = isOpen;
+  if (isOpen) {
+    panelEl.scrollTop = 0;
+    closePanelBtn.focus();
+  } else {
+    openPanelBtn.focus();
+  }
+  setTimeout(() => map.invalidateSize(), 250);
+}
+
+closePanelBtn.addEventListener('click', () => setPanelOpen(false));
+openPanelBtn.addEventListener('click', () => setPanelOpen(true));
+openPanelBtn.hidden = true;
+
+function renderTutorial() {
+  const step = tutorialSteps[tutorialStep];
+  tutorialTitleEl.textContent = step.title;
+  tutorialBodyEl.innerHTML = step.body;
+  tutorialProgressEl.textContent = `Step ${tutorialStep + 1} of ${tutorialSteps.length}`;
+  tutorialBackBtn.disabled = tutorialStep === 0;
+  tutorialNextBtn.textContent = tutorialStep === tutorialSteps.length - 1 ? 'Done' : 'Next';
+}
+
+function openTutorial() {
+  tutorialStep = 0;
+  renderTutorial();
+  tutorialEl.hidden = false;
+  closeTutorialBtn.focus();
+}
+
+function closeTutorial() {
+  tutorialEl.hidden = true;
+  tutorialBtn.focus();
+}
+
+tutorialBtn.addEventListener('click', openTutorial);
+closeTutorialBtn.addEventListener('click', closeTutorial);
+tutorialNextBtn.addEventListener('click', ()=>{
+  if (tutorialStep === tutorialSteps.length - 1) closeTutorial();
+  else { tutorialStep += 1; renderTutorial(); }
+});
+tutorialBackBtn.addEventListener('click', ()=>{
+  if (tutorialStep > 0) { tutorialStep -= 1; renderTutorial(); }
+});
+tutorialEl.addEventListener('click', event=>{
+  if (event.target === tutorialEl) closeTutorial();
+});
+document.addEventListener('keydown', event=>{
+  if (event.key === 'Escape' && !tutorialEl.hidden) closeTutorial();
+});

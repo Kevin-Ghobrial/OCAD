@@ -13,7 +13,10 @@
   <body>
     <div id="app">
       <aside id="panel">
-        <h1>Disciples Map Quiz</h1>
+        <div class="panel-header">
+          <h1>Disciples Map Quiz</h1>
+          <button id="closePanelBtn" class="panel-close" aria-label="Close quiz panel">×</button>
+        </div>
         <div id="progress">Loading...</div>
         <div id="prompt">—</div>
         <div id="controls">
@@ -21,19 +24,51 @@
           <button id="retryBtn" disabled>Retry</button>
           <button id="revealBtn">Reveal Answer</button>
           <button id="showAllBtn">Hint</button>
+          <button id="tutorialBtn">Presenter Tutorial</button>
         </div>
         <div id="feedback"></div>
-        <section id="summary" hidden>
-          <h2>About this journey</h2>
-          <p id="summaryText"></p>
-          <a id="summarySource" href="https://suscopts.org/diocese/bishop/bible-study" target="_blank" rel="noreferrer">Read the SUSCopts source</a>
-        </section>
         <div id="score">Score: 0 / 0</div>
       </aside>
       <main id="mapwrap">
         <div id="map"></div>
         <div class="compass-rose" aria-hidden="true"><span>N</span></div>
+        <button id="openPanelBtn" class="panel-open" aria-label="Open quiz panel">Open Quiz</button>
       </main>
+    </div>
+
+    <div id="summary" class="summary-backdrop" hidden>
+      <section class="summary-card" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
+        <div class="summary-heading">
+          <div>
+            <span class="summary-kicker">Journey explained</span>
+            <h2 id="summaryTitle">About this journey</h2>
+          </div>
+          <button id="closeSummaryBtn" class="summary-close" aria-label="Close journey description">×</button>
+        </div>
+        <p id="summaryText"></p>
+        <a id="summarySource" href="https://suscopts.org/diocese/bishop/bible-study" target="_blank" rel="noreferrer">Read the source study</a>
+        <button id="continueSummaryBtn" class="summary-continue">Return to map</button>
+      </section>
+    </div>
+
+    <div id="tutorial" class="tutorial-backdrop" hidden>
+      <section class="tutorial-card" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+        <div class="tutorial-heading">
+          <div>
+            <span id="tutorialKicker">Presenter guide</span>
+            <h2 id="tutorialTitle">Welcome your group</h2>
+          </div>
+          <button id="closeTutorialBtn" class="tutorial-close" aria-label="Close tutorial">×</button>
+        </div>
+        <div id="tutorialBody"></div>
+        <div class="tutorial-footer">
+          <span id="tutorialProgress">Step 1 of 5</span>
+          <div>
+            <button id="tutorialBackBtn" disabled>Back</button>
+            <button id="tutorialNextBtn">Next</button>
+          </div>
+        </div>
+      </section>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

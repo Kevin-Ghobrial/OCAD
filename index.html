@@ -42,13 +42,24 @@
         <div class="summary-heading">
           <div>
             <span class="summary-kicker">Journey explained</span>
-            <h2 id="summaryTitle">About this journey</h2>
+            <h2 id="summaryTitle">Country</h2>
           </div>
           <button id="closeSummaryBtn" class="summary-close" aria-label="Close journey description">×</button>
         </div>
+        <p id="summaryModernDay" class="summary-modern-day"></p>
         <p id="summaryText"></p>
         <a id="summarySource" href="https://suscopts.org/diocese/bishop/bible-study" target="_blank" rel="noreferrer">Read the source study</a>
         <button id="continueSummaryBtn" class="summary-continue">Return to map</button>
+      </section>
+    </div>
+
+    <div id="winOverlay" class="win-backdrop" hidden>
+      <div id="confetti" class="confetti" aria-hidden="true"></div>
+      <section class="win-card" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+        <span class="win-kicker">Map complete</span>
+        <h2 id="winTitle">You Win!</h2>
+        <p id="winScore"></p>
+        <button id="playAgainBtn" class="summary-continue">Play Again</button>
       </section>
     </div>
 

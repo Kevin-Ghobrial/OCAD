@@ -65,10 +65,23 @@ button:disabled { cursor:not-allowed; opacity:.5 }
 .summary-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; border-bottom:1px solid #aa8d63; padding-bottom:12px; }
 .summary-heading h2 { margin:4px 0 0; color:#2f382d; font-size:28px; }
 .summary-kicker { color:#24555a; font-size:12px; font-weight:bold; letter-spacing:.08em; text-transform:uppercase; }
+.summary-modern-day { margin-top:16px !important; color:#24555a; font-size:13px !important; font-weight:bold; }
 .summary-close { width:36px; min-height:36px; padding:0; font-family:Arial,sans-serif; font-size:26px; line-height:1; }
 .summary-card p { margin:20px 0 0; font-size:18px; line-height:1.6; }
 .summary-card a { display:inline-block; margin-top:18px; color:#24555a; font-size:13px; font-weight:600; }
 .summary-continue { display:block; margin-top:22px; background:#315c43; border-color:#284a36; color:#f5e8c5; font-weight:600; }
+.win-backdrop { position:fixed; inset:0; z-index:2100; display:grid; place-items:center; padding:20px; background:rgba(22,32,29,.76); overflow:hidden; }
+.win-backdrop[hidden] { display:none; }
+.win-card { position:relative; z-index:2; width:min(430px,100%); padding:34px 28px 28px; text-align:center; color:#382d22; background:#ead8ad; border:2px solid #735c43; border-radius:8px; box-shadow:0 18px 50px rgba(0,0,0,.42); }
+.win-kicker { color:#24555a; font-size:12px; font-weight:bold; letter-spacing:.1em; text-transform:uppercase; }
+.win-card h2 { margin:8px 0; color:#315c43; font-size:42px; }
+.win-card p { margin:0; font-size:18px; }
+.confetti { position:absolute; inset:0; z-index:1; pointer-events:none; }
+.confetti-piece { position:absolute; top:-18px; left:var(--x); width:9px; height:18px; background:#d2b879; transform:rotate(var(--rotation)); animation:fall 2.6s var(--delay) ease-in forwards; }
+.confetti-1 { background:#315c43; width:7px; height:13px; }
+.confetti-2 { background:#c57961; border-radius:50%; width:10px; height:10px; }
+.confetti-3 { background:#537d79; width:6px; height:20px; }
+@keyframes fall { to { top:110%; transform:translateY(0) rotate(720deg); } }
 
 @media (max-width: 700px) {
 	html, body, #app { min-height:100%; height:100%; overflow:hidden; }

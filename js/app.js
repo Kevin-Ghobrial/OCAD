@@ -18,6 +18,8 @@ const tutorialProgressEl = document.getElementById('tutorialProgress');
 const tutorialBackBtn = document.getElementById('tutorialBackBtn');
 const tutorialNextBtn = document.getElementById('tutorialNextBtn');
 const summaryEl = document.getElementById('summary');
+const summaryTitleEl = document.getElementById('summaryTitle');
+const summaryModernDayEl = document.getElementById('summaryModernDay');
 const summaryTextEl = document.getElementById('summaryText');
 const summarySourceEl = document.getElementById('summarySource');
 const closeSummaryBtn = document.getElementById('closeSummaryBtn');
@@ -25,6 +27,10 @@ const continueSummaryBtn = document.getElementById('continueSummaryBtn');
 const panelEl = document.getElementById('panel');
 const closePanelBtn = document.getElementById('closePanelBtn');
 const openPanelBtn = document.getElementById('openPanelBtn');
+const winOverlayEl = document.getElementById('winOverlay');
+const winScoreEl = document.getElementById('winScore');
+const confettiEl = document.getElementById('confetti');
+const playAgainBtn = document.getElementById('playAgainBtn');
 
 let places = [];
 let index = 0;
@@ -250,6 +256,8 @@ function showQuestion(i){
   feedbackEl.textContent = '';
   learnMoreBtn.hidden = true;
   summaryEl.hidden = true;
+  summaryTitleEl.textContent = 'Country';
+  summaryModernDayEl.textContent = '';
   summaryTextEl.textContent = '';
   summarySourceEl.href = 'https://suscopts.org/diocese/bishop/bible-study';
   if (countryLayer) countryLayer.resetStyle();
@@ -317,6 +325,8 @@ revealBtn.addEventListener('click', ()=>{
 learnMoreBtn.addEventListener('click', openSummary);
 
 function openSummary() {
+  summaryTitleEl.textContent = currentTarget.country;
+  summaryModernDayEl.textContent = `Modern-day country: ${currentTarget.country}`;
   summaryTextEl.textContent = currentTarget.summary;
   summarySourceEl.href = currentTarget.source;
   summaryEl.hidden = false;
@@ -360,8 +370,35 @@ function nextQuestion(){
     retryBtn.disabled = true;
     promptEl.textContent = 'Finished';
     feedbackEl.textContent = `Final score: ${score} / ${places.length}`;
+    openWinOverlay();
   }
 }
+
+function openWinOverlay() {
+  winScoreEl.textContent = `Final score: ${score} / ${places.length}`;
+  confettiEl.innerHTML = '';
+  for (let i = 0; i < 36; i += 1) {
+    const piece = document.createElement('i');
+    piece.style.setProperty('--x', `${Math.random() * 100}%`);
+    piece.style.setProperty('--delay', `${Math.random() * 0.45}s`);
+    piece.style.setProperty('--rotation', `${Math.random() * 360}deg`);
+    piece.className = `confetti-piece confetti-${i % 4}`;
+    confettiEl.appendChild(piece);
+  }
+  winOverlayEl.hidden = false;
+  playAgainBtn.focus();
+}
+
+function closeWinOverlay() {
+  winOverlayEl.hidden = true;
+}
+
+playAgainBtn.addEventListener('click', () => {
+  score = 0;
+  closeWinOverlay();
+  showQuestion(0);
+  updateScore();
+});
 
 function updateScore(){
   scoreEl.textContent = `Score: ${score} / ${places.length}`;

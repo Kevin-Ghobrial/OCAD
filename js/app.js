@@ -8,6 +8,7 @@ const nextBtn = document.getElementById('nextBtn');
 const retryBtn = document.getElementById('retryBtn');
 const revealBtn = document.getElementById('revealBtn');
 const showAllBtn = document.getElementById('showAllBtn');
+const learnMoreBtn = document.getElementById('learnMoreBtn');
 const tutorialBtn = document.getElementById('tutorialBtn');
 const tutorialEl = document.getElementById('tutorial');
 const closeTutorialBtn = document.getElementById('closeTutorialBtn');
@@ -42,7 +43,7 @@ const labelMeasureContext = labelMeasureCanvas.getContext('2d');
 const tutorialSteps = [
   {
     title: 'Welcome your group',
-    body: '<p>Tell everyone: “We are going to trace the journeys of the disciples, Mark, and Paul. Your job is to identify the country where each person served, ministered, or died.”</p><p>Remind the group that the map is a learning tool. Encourage thoughtful guesses and discussion before anyone uses a hint.</p>'
+    body: '<p>Tell everyone: “We are going to trace the journeys of the disciples, Mark, and Paul. Your job is to identify the country where each person served and ministered.”</p><p>Remind the group that the map is a learning tool. Encourage thoughtful guesses and discussion before anyone uses a hint.</p>'
   },
   {
     title: 'Explain a turn',
@@ -247,6 +248,7 @@ function showQuestion(i){
   progressEl.textContent = `Question ${index+1} / ${places.length}`;
   promptEl.textContent = currentTarget ? currentTarget.prompt || currentTarget.name : 'Done';
   feedbackEl.textContent = '';
+  learnMoreBtn.hidden = true;
   summaryEl.hidden = true;
   summaryTextEl.textContent = '';
   summarySourceEl.href = 'https://suscopts.org/diocese/bishop/bible-study';
@@ -264,16 +266,14 @@ function submitAnswer(countryCode) {
   if (correct) {
     if (!questionScored) score += 1;
     questionScored = true;
-    feedbackEl.textContent = `Correct! ${currentTarget.name} is associated with ${currentTarget.country}.`;
+    feedbackEl.textContent = 'Correct!';
+    learnMoreBtn.hidden = false;
   } else {
     feedbackEl.textContent = `Not quite. You selected ${getCountryName(countryCode)}.`;
   }
   highlightCountry(countryCode, correct ? correctStyle : incorrectStyle);
   nextBtn.disabled = !correct;
   retryBtn.disabled = false;
-  if (correct) {
-    openSummary();
-  }
   updateScore();
 }
 
@@ -297,6 +297,7 @@ retryBtn.addEventListener('click', ()=>{
   nextBtn.disabled = true;
   retryBtn.disabled = true;
   feedbackEl.textContent = 'Try again: choose a country on the map.';
+  learnMoreBtn.hidden = true;
   summaryEl.hidden = true;
   if (countryLayer) countryLayer.resetStyle();
 });
@@ -312,6 +313,8 @@ revealBtn.addEventListener('click', ()=>{
   summarySourceEl.href = currentTarget.source;
   openSummary();
 });
+
+learnMoreBtn.addEventListener('click', openSummary);
 
 function openSummary() {
   summaryTextEl.textContent = currentTarget.summary;

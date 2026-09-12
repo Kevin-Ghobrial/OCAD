@@ -21,6 +21,9 @@ button:disabled { cursor:not-allowed; opacity:.5 }
 #tutorialBtn { width:100%; margin-top:2px; background:#d2b879; }
 #tutorialBtn { grid-column:1 / -1; }
 #feedback { margin-top:8px; min-height:36px; color:#513b2a }
+#learnMoreBtn { margin-top:-2px; padding:5px 9px; min-height:30px; background:transparent; color:#24555a; border-color:#8f7650; font-size:12px; }
+#learnMoreBtn:hover:not(:disabled) { background:#ddc78f; }
+#learnMoreBtn[hidden] { display:none; }
 #score { margin-top:12px; font-weight:600 }
 .country-label {
 	padding: 0;
